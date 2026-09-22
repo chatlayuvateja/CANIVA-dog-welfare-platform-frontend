@@ -437,3 +437,346 @@ a {
   font-size: 0.92rem;
   margin-bottom: 1rem;
 }
+
+/* ============================================================
+   Session 15 - public UI (hero, cards, filters, forms)
+   ============================================================ */
+
+.hero {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem 1.6rem;
+  margin-bottom: 1.75rem;
+}
+
+.hero h1 {
+  margin-top: 0;
+}
+
+.page-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.page-section-head h2 {
+  margin: 0;
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+/* ---------- Event cards / grid ---------- */
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.event-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.event-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.event-capacity {
+  font-size: 0.82rem;
+  color: var(--color-muted);
+}
+
+.event-card h3 {
+  margin: 0.25rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.event-ngo {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.88rem;
+}
+
+.event-details-link {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-top: auto;
+  padding-top: 0.4rem;
+}
+
+.meta-list {
+  list-style: none;
+  margin: 0.4rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.meta-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.meta-list-wide {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin: 0.9rem 0 1.25rem;
+  font-size: 0.95rem;
+}
+
+.meta-label {
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+
+.event-description h2,
+.animal-description h2 {
+  font-size: 1.15rem;
+}
+
+.event-description p,
+.animal-description p {
+  margin: 0.4rem 0 0.8rem;
+}
+
+/* ---------- Filter bar ---------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.8rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.filter-bar .form-field {
+  flex: 1 1 170px;
+  margin-bottom: 0;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* ---------- Pagination ---------- */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.pagination button[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.page-info {
+  color: var(--color-muted);
+  font-size: 0.92rem;
+}
+
+/* ---------- Animal cards ---------- */
+.animal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.animal-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.animal-media img {
+  display: block;
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+}
+
+.placeholder-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 170px;
+  background: #eef1f4;
+  color: var(--color-muted);
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.animal-body {
+  padding: 0.85rem 1rem 1rem;
+}
+
+.animal-body h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.05rem;
+}
+
+.animal-meta {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--color-text);
+}
+
+.animal-body .muted {
+  margin: 0.3rem 0 0;
+  font-size: 0.86rem;
+}
+
+/* ---------- Animal detail ---------- */
+.animal-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  margin-top: 0.75rem;
+}
+
+.animal-media-detail {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.animal-media-detail img {
+  height: 260px;
+}
+
+.animal-media-detail .placeholder-media {
+  height: 260px;
+}
+
+.animal-info h1 {
+  margin: 0;
+}
+
+/* ---------- Auth forms ---------- */
+.auth-form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem 1.4rem;
+  margin-top: 1rem;
+}
+
+.auth-form button[type='submit'] {
+  width: 100%;
+}
+
+.form-alt {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-size: 0.94rem;
+  color: var(--color-muted);
+}
+
+.radio-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.radio-option {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.94rem;
+}
+
+.radio-option input {
+  margin-top: 0.2rem;
+  accent-color: var(--color-primary);
+}
+
+.radio-option:has(input:checked) {
+  border-color: var(--color-primary);
+  background: #eef7f2;
+}
+
+/* ---------- Friendly 404 blocks ---------- */
+.not-found-state {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.not-found-state h1 {
+  margin-top: 0;
+}
+
+/* ---------- Public UI responsive ---------- */
+@media (max-width: 720px) {
+  .animal-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-actions {
+    justify-content: flex-start;
+  }
+
+  .meta-list li {
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .pagination {
+    justify-content: center;
+  }
+
+  .hero {
+    padding: 1.4rem 1.1rem;
+  }
+}

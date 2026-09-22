@@ -1,0 +1,207 @@
+/* ============================================================
+   Animal Welfare Platform - global styles
+   Simple, clean, mobile-responsive foundation (Session 02).
+   ============================================================ */
+
+:root {
+  --color-primary: #1f7a4d;
+  --color-primary-dark: #175e3c;
+  --color-accent: #f5a623;
+  --color-text: #22303c;
+  --color-muted: #6b7a89;
+  --color-bg: #f7f9fa;
+  --color-surface: #ffffff;
+  --color-border: #e1e7ec;
+  --color-danger: #c0392b;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.55;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+/* ---------- Layout ---------- */
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.footer {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  padding: 1rem;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.85rem 1.25rem;
+}
+
+.navbar-brand a {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-primary-dark);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.navbar-links a {
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.navbar-links a:hover,
+.navbar-links a.active {
+  color: var(--color-primary);
+}
+
+.navbar-links .btn-register {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius);
+}
+
+.navbar-links .btn-register:hover,
+.navbar-links .btn-register.active {
+  background: var(--color-primary-dark);
+  color: #fff;
+}
+
+/* ---------- Pages ---------- */
+.page h1 {
+  margin-top: 0.5rem;
+}
+
+.page-narrow {
+  max-width: 460px;
+}
+
+.lead {
+  color: var(--color-muted);
+  font-size: 1.05rem;
+}
+
+.empty-state {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-muted);
+  margin-top: 1.5rem;
+}
+
+/* ---------- Home ---------- */
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.25rem 0 2rem;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.category-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.1rem 1.2rem;
+}
+
+.category-card h3 {
+  margin-top: 0;
+}
+
+.category-card p {
+  color: var(--color-muted);
+  margin-bottom: 0;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background: #eef7f2;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+}

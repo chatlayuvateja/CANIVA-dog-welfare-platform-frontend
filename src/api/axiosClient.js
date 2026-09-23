@@ -57,9 +57,18 @@ axiosClient.interceptors.response.use(
     }
 
     if (response?.status === 401) {
+      const hadSession = Boolean(localStorage.getItem('token'))
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       if (!window.location.pathname.startsWith('/login')) {
+        // Expired/tampered JWT mid-flow: remember where the user was so
+        // the Login page can send them straight back after re-auth.
+        if (hadSession) {
+          sessionStorage.setItem(
+            'redirectAfterLogin',
+            window.location.pathname + window.location.search,
+          )
+        }
         window.location.assign('/login')
       }
     }

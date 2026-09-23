@@ -8,7 +8,9 @@
 
 export function formatDate(isoDate) {
   if (!isoDate) return ''
-  const [year, month, day] = isoDate.split('-').map(Number)
+  // Accept full LocalDateTime strings too ("2030-12-31T09:00:00") by
+  // taking only the date part before parsing.
+  const [year, month, day] = isoDate.slice(0, 10).split('-').map(Number)
   if (!year || !month || !day) return isoDate
   return new Date(year, month - 1, day).toLocaleDateString(undefined, {
     weekday: 'short',

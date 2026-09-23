@@ -58,8 +58,12 @@ export default function Login() {
     setSubmitting(true)
     try {
       const authResponse = await login(form.email.trim(), form.password)
+      // Priority: page the guard sent us from -> path saved by the axios
+      // interceptor when the JWT expired -> role-based home.
+      const saved = sessionStorage.getItem('redirectAfterLogin')
+      sessionStorage.removeItem('redirectAfterLogin')
       const target =
-        from || (authResponse?.user?.role === 'NGO' ? '/ngo' : '/')
+        from || saved || (authResponse?.user?.role === 'NGO' ? '/ngo' : '/')
       navigate(target, { replace: true })
     } catch (error) {
       setApiError(error)

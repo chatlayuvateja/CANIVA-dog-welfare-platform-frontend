@@ -27,6 +27,7 @@ export default function Navbar() {
       <nav className="navbar-links">
         <NavLink to="/events">Events</NavLink>
         <NavLink to="/adoption">Adoption</NavLink>
+        {isLoggedIn && <NavLink to="/my-activities">My Activities</NavLink>}
 
         {isNgo && (
           <>

@@ -121,6 +121,30 @@ export default function EventDetails() {
         </li>
       </ul>
 
+      <div className="action-row">
+        {event.eventType === 'DOG_REGISTRATION' && (
+          <Link className="btn btn-primary" to={`/events/${event.id}/register-dog`}>
+            Register your dog
+          </Link>
+        )}
+        {event.eventType === 'VACCINATION' && (
+          <Link
+            className="btn btn-primary"
+            to={`/events/${event.id}/register-vaccination`}
+          >
+            Register for vaccination
+          </Link>
+        )}
+        {event.eventType === 'ADOPTION' && (
+          <Link className="btn btn-primary" to="/adoption">
+            View animals for adoption
+          </Link>
+        )}
+        <span className="muted">
+          You will sign in first if needed - your form stays waiting.
+        </span>
+      </div>
+
       {event.description && (
         <div className="event-description">
           <h2>About this event</h2>

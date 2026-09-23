@@ -136,6 +136,15 @@ export default function AnimalDetails() {
             )}
           </ul>
 
+          <div className="action-row">
+            <Link
+              className="btn btn-primary"
+              to={`/adoption/animals/${animal.id}/apply`}
+            >
+              Apply for adoption
+            </Link>
+          </div>
+
           {animal.description && (
             <div className="animal-description">
               <h2>About {animal.name}</h2>

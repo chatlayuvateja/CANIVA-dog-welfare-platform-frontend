@@ -780,3 +780,191 @@ a {
     padding: 1.4rem 1.1rem;
   }
 }
+
+/* ============================================================
+   Session 16 - public workflows (forms, confirmations, activities)
+   ============================================================ */
+
+.workflow-intro {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.2rem;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.workflow-intro h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.workflow-intro p {
+  margin: 0.2rem 0;
+  font-size: 0.93rem;
+  color: var(--color-muted);
+}
+
+.form-section {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  padding: 0.9rem 1.1rem 0.4rem;
+  margin-bottom: 1.1rem;
+}
+
+.form-section > h2 {
+  font-size: 1rem;
+  margin: 0.1rem 0 0.7rem;
+}
+
+.action-row {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 1.1rem 0;
+}
+
+.action-row .muted {
+  font-size: 0.88rem;
+}
+
+/* ---------- Confirmation panel ---------- */
+.success-box {
+  background: #eef7f2;
+  border: 1px solid #bfe3d0;
+  border-radius: var(--radius);
+  padding: 1.4rem 1.4rem 1.2rem;
+  margin-top: 1rem;
+}
+
+.success-box h2 {
+  margin: 0 0 0.5rem;
+  color: var(--color-primary-dark);
+}
+
+.success-box p {
+  margin: 0.45rem 0;
+}
+
+.success-badge {
+  margin-bottom: 0.3rem;
+}
+
+.summary-list {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0.85rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.93rem;
+}
+
+.summary-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.summary-list .meta-label {
+  color: var(--color-muted);
+}
+
+/* ---------- My Activities ---------- */
+.activity-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.activity-card h2 {
+  margin: 0.1rem 0 0.7rem;
+  font-size: 1.05rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.activity-table th {
+  text-align: left;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.activity-table td {
+  padding: 0.55rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.activity-table tr:last-child td {
+  border-bottom: none;
+}
+
+.activity-table .reg-number {
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 0.87rem;
+}
+
+.activity-table .muted-cell {
+  color: var(--color-muted);
+  font-size: 0.87rem;
+}
+
+/* ---------- Workflow responsive ---------- */
+@media (max-width: 640px) {
+  .action-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-row .btn {
+    text-align: center;
+  }
+
+  .activity-table thead {
+    display: none;
+  }
+
+  .activity-table tr {
+    display: block;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.35rem 0;
+  }
+
+  .activity-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: none;
+    padding: 0.22rem 0.2rem;
+  }
+
+  .activity-table td::before {
+    content: attr(data-label);
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+}

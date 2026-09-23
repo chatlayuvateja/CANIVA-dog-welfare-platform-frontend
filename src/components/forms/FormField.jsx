@@ -54,7 +54,7 @@ export default function FormField({
           {options.map((option) => {
             const opt = typeof option === 'string' ? { value: option, label: option } : option
             return (
-              <option key={opt.value} value={opt.value}>
+              <option key={opt.value} value={opt.value} disabled={opt.disabled}>
                 {opt.label}
               </option>
             )

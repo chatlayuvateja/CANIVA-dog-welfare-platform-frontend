@@ -12,12 +12,23 @@ import axiosClient from './axiosClient.js'
  * Owner read (Bearer):
  *   GET  /api/me/vaccination-registrations -> own registrations
  *
+ * Slot picker (public, Session 16):
+ *   GET  /api/events/{id}/slots -> 200 [{id, slotLabel, slotTime, capacity,
+ *        bookedCount, remainingCount}] for PUBLISHED events ([] when the
+ *        event has no slots; unknown/draft/cancelled -> 404, no leak)
+ *
  * NGO actions (Bearer, ROLE_NGO, own events only, foreign -> 404):
  *   GET   /api/ngo/events/{eventId}/vaccination-registrations -> list
  *   PATCH /api/ngo/vaccination-registrations/{id}/complete -> COMPLETED
  *   PATCH /api/ngo/vaccination-registrations/{id}/noshow    -> NO_SHOW
  * (complete/noshow: only from REGISTERED else 409; no request body)
  */
+
+/** PUBLIC slot list for the booking form (no token required). */
+export async function listSlots(eventId) {
+  const res = await axiosClient.get(`/api/events/${eventId}/slots`)
+  return res.data
+}
 
 export function submitForEvent(eventId, payload) {
   return axiosClient

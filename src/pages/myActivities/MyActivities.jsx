@@ -80,7 +80,7 @@ export default function MyActivities() {
             </Link>
           </EmptyState>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
+          <div className="table-wrap">
             <table className="activity-table">
               <thead>
                 <tr>
@@ -140,7 +140,7 @@ export default function MyActivities() {
             </Link>
           </EmptyState>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
+          <div className="table-wrap">
             <table className="activity-table">
               <thead>
                 <tr>
@@ -194,7 +194,7 @@ export default function MyActivities() {
             </Link>
           </EmptyState>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
+          <div className="table-wrap">
             <table className="activity-table">
               <thead>
                 <tr>

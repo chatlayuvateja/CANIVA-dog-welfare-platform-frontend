@@ -1,22 +1,31 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import FormField from './FormField.jsx'
 import FormError from './FormError.jsx'
 import { fieldErrorsToObject, hasErrors } from '../../utils/validators.js'
+import { fetchOwnImageObjectUrl } from '../../api/animalApi.js'
 
 const GENDER_OPTIONS = ['Male', 'Female', 'Other']
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024
+const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 
 /**
  * Animal create/edit form (Session 17) - used inside the Animals page modal.
  *
  * Mirrors AnimalCreateRequest / AnimalUpdateRequest: name* <=100,
  * species* <=50, breed/age/gender optional, description <=2000,
- * imageUrl optional external http(s) URL (same rule as the backend
- * @Pattern), adoptionEvent optional link to one of the NGO's own
- * ADOPTION events (event id sent only when chosen; omitted on PUT clears
- * the link - PUT is a full replacement). Status/ownership are NEVER sent.
+ * adoptionEvent optional link to one of the NGO's own ADOPTION events
+ * (event id sent only when chosen; omitted on PUT clears the link - PUT is
+ * a full replacement). Status/ownership are NEVER sent.
  *
- * `onSubmit(payload)` must call the API and REJECT with
- * { status, message, fieldErrors } on failure.
+ * Image: a file picker replaces the URL field. The chosen file (<=5 MB,
+ * JPEG/PNG/WebP/GIF - the backend re-checks both from the magic bytes) is
+ * uploaded right after the save; the old legacy imageUrl is echoed
+ * unchanged on PUT so a text-only edit never wipes an existing photo link
+ * (unless the user presses "Remove photo").
+ *
+ * `onSubmit(payload, imageOps)` must call the API and REJECT with
+ * { status, message, fieldErrors } on failure, where imageOps is
+ * { file: File|null, removeImage: boolean }.
  */
 export default function AnimalForm({
   initial,
@@ -33,19 +42,56 @@ export default function AnimalForm({
     age: initial?.age ?? '',
     gender: initial?.gender ?? '',
     description: initial?.description ?? '',
-    imageUrl: initial?.imageUrl ?? '',
     eventId: initial?.eventId != null ? String(initial.eventId) : '',
   }))
   const [errors, setErrors] = useState({})
   const [apiError, setApiError] = useState(null)
 
+  const [file, setFile] = useState(null) // chosen photo, uploaded after save
+  const [removeImage, setRemoveImage] = useState(false)
+  const [imageError, setImageError] = useState(null)
+  const [filePreview, setFilePreview] = useState(null)
+  // Legacy external URL shows instantly; an uploaded photo is fetched
+  // below as a blob (the NGO endpoint needs a Bearer header).
+  const [currentPreview, setCurrentPreview] = useState(initial?.imageUrl ?? null)
+  const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    if (!initial?.hasImage || initial?.id == null) return undefined
+    let stale = false
+    let objectUrl = null
+    fetchOwnImageObjectUrl(initial.id)
+      .then((url) => {
+        if (stale) {
+          URL.revokeObjectURL(url)
+          return
+        }
+        objectUrl = url
+        setCurrentPreview(url)
+      })
+      .catch(() => {
+        if (!stale) setCurrentPreview(null)
+      })
+    return () => {
+      stale = true
+      if (objectUrl) URL.revokeObjectURL(objectUrl)
+    }
+  }, [initial?.id, initial?.hasImage])
+
+  useEffect(() => {
+    if (!file) {
+      setFilePreview(null)
+      return undefined
+    }
+    const url = URL.createObjectURL(file)
+    setFilePreview(url)
+    return () => URL.revokeObjectURL(url)
+  }, [file])
+
   function validate() {
     const next = {}
     if (!form.name.trim()) next.name = 'Name is required'
     if (!form.species.trim()) next.species = 'Species is required'
-    if (form.imageUrl.trim() && !/^https?:\/\/\S+$/.test(form.imageUrl.trim())) {
-      next.imageUrl = 'Must be a full http(s):// address'
-    }
     return next
   }
 
@@ -54,7 +100,7 @@ export default function AnimalForm({
     const clientErrors = validate()
     setErrors(clientErrors)
     setApiError(null)
-    if (hasErrors(clientErrors)) return
+    if (hasErrors(clientErrors) || imageError) return
 
     const payload = {
       name: form.name.trim(),
@@ -65,11 +111,15 @@ export default function AnimalForm({
       description: form.description.trim(),
     }
     // Omitted optional fields = null (PUT full-replacement semantics).
-    if (form.imageUrl.trim()) payload.imageUrl = form.imageUrl.trim()
+    // The legacy URL field is gone from the UI, so echo the stored value -
+    // otherwise a plain text edit would silently clear an existing photo
+    // link. "Remove photo" opts out of the echo. A fresh upload clears the
+    // URL server-side anyway.
+    if (!removeImage && initial?.imageUrl) payload.imageUrl = initial.imageUrl
     if (form.eventId) payload.eventId = Number(form.eventId)
 
     try {
-      await onSubmit(payload)
+      await onSubmit(payload, { file, removeImage })
     } catch (err) {
       setApiError(err)
       setErrors(fieldErrorsToObject(err))
@@ -79,6 +129,39 @@ export default function AnimalForm({
   function update(field) {
     return (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))
   }
+
+  function handleFileChange(event) {
+    const chosen = event.target.files?.[0] ?? null
+    if (!chosen) {
+      setFile(null)
+      setImageError(null)
+      return
+    }
+    if (chosen.size > MAX_IMAGE_BYTES) {
+      event.target.value = ''
+      setFile(null)
+      setImageError('Image must be 5 MB or smaller')
+      return
+    }
+    if (chosen.type && !IMAGE_TYPES.includes(chosen.type)) {
+      event.target.value = ''
+      setFile(null)
+      setImageError('Only JPEG, PNG, WebP or GIF images are allowed')
+      return
+    }
+    setImageError(null)
+    setRemoveImage(false) // a new photo replaces the current one
+    setFile(chosen)
+  }
+
+  function clearSelectedFile() {
+    setFile(null)
+    setImageError(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const hasCurrent = Boolean(initial && (initial.hasImage || initial.imageUrl))
+  const displaySrc = file ? filePreview : removeImage ? null : currentPreview
 
   const genderOptions = GENDER_OPTIONS.includes(form.gender)
     ? GENDER_OPTIONS.map((value) => ({ value, label: value }))
@@ -144,15 +227,72 @@ export default function AnimalForm({
         onChange={update('description')}
         error={errors.description}
       />
-      <FormField
-        label="Photo URL (optional)"
-        name="imageUrl"
-        type="url"
-        placeholder="https://…"
-        value={form.imageUrl}
-        onChange={update('imageUrl')}
-        error={errors.imageUrl}
-      />
+
+      <div className="form-field">
+        <label htmlFor="imageFile">
+          Photo (optional)
+        </label>
+        <input
+          ref={fileInputRef}
+          id="imageFile"
+          name="imageFile"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          onChange={handleFileChange}
+          aria-invalid={imageError ? true : undefined}
+        />
+        <p className="file-hint">JPEG, PNG, WebP or GIF - up to 5 MB.</p>
+        {imageError && (
+          <span className="field-error" role="alert">
+            {imageError}
+          </span>
+        )}
+        {errors.imageUrl && (
+          <span className="field-error" role="alert">
+            {errors.imageUrl}
+          </span>
+        )}
+
+        {displaySrc ? (
+          <div className="image-preview">
+            <img
+              src={displaySrc}
+              alt={file ? 'Selected photo preview' : 'Current photo'}
+            />
+          </div>
+        ) : (
+          removeImage &&
+          hasCurrent && (
+            <p className="file-hint">
+              The current photo will be removed when you save.
+            </p>
+          )
+        )}
+
+        {file && (
+          <button type="button" className="btn-link" onClick={clearSelectedFile}>
+            Clear selected photo
+          </button>
+        )}
+        {!file && hasCurrent && !removeImage && (
+          <button
+            type="button"
+            className="btn-link"
+            onClick={() => setRemoveImage(true)}
+          >
+            Remove photo
+          </button>
+        )}
+        {!file && hasCurrent && removeImage && (
+          <button
+            type="button"
+            className="btn-link"
+            onClick={() => setRemoveImage(false)}
+          >
+            Undo remove
+          </button>
+        )}
+      </div>
 
       {adoptionEvents.length > 0 && (
         <FormField

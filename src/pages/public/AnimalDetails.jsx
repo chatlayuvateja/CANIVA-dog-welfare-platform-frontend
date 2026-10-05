@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getAvailableAnimal } from '../../api/animalApi.js'
+import { animalImageUrl, getAvailableAnimal } from '../../api/animalApi.js'
 import StatusBadge from '../../components/common/StatusBadge.jsx'
 import Spinner from '../../components/common/Spinner.jsx'
 import ErrorMessage from '../../components/common/ErrorMessage.jsx'
@@ -82,6 +82,8 @@ export default function AnimalDetails() {
 
   if (!animal) return null
 
+  const imageSrc = animalImageUrl(animal)
+
   return (
     <section className="page">
       <p>
@@ -90,8 +92,8 @@ export default function AnimalDetails() {
 
       <div className="animal-detail">
         <div className="animal-media animal-media-detail">
-          {animal.imageUrl ? (
-            <img src={animal.imageUrl} alt={animal.name} />
+          {imageSrc ? (
+            <img src={imageSrc} alt={animal.name} />
           ) : (
             <span className="placeholder-media" aria-hidden="true">
               {(animal.species || '?').charAt(0).toUpperCase()}

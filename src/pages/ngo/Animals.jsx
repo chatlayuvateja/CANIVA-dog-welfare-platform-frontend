@@ -4,7 +4,9 @@ import {
   changeStatus,
   createAnimal,
   listOwnAnimals,
+  removeImage,
   updateAnimal,
+  uploadImage,
 } from '../../api/animalApi.js'
 import { listOwnEvents } from '../../api/eventApi.js'
 import { formatDate } from '../../utils/date.js'
@@ -87,14 +89,27 @@ export default function Animals() {
     return map
   }, [events])
 
-  async function saveAnimal(payload) {
+  async function saveAnimal(payload, imageOps = {}) {
     try {
+      let saved
       if (modal?.mode === 'edit') {
-        await updateAnimal(modal.animal.id, payload)
+        saved = await updateAnimal(modal.animal.id, payload)
         setBanner({ type: 'success', text: `“${payload.name}” updated.` })
       } else {
-        await createAnimal(payload)
+        saved = await createAnimal(payload)
         setBanner({ type: 'success', text: `“${payload.name}” added as AVAILABLE.` })
+      }
+      // Photo ops run AFTER the save. A failure here must never retry the
+      // create (that would duplicate the animal), so the listing stays
+      // saved and the failure surfaces as a warning banner instead.
+      try {
+        if (imageOps.file) await uploadImage(saved.id, imageOps.file)
+        else if (imageOps.removeImage) await removeImage(saved.id)
+      } catch (imgErr) {
+        setBanner({
+          type: 'error',
+          text: `Saved, but the photo failed: ${imgErr.message}`,
+        })
       }
       setModal(null)
       reload()
@@ -306,10 +321,10 @@ export default function Animals() {
             submitting={busy}
             submitLabel={modal.mode === 'edit' ? 'Save changes' : 'Add animal'}
             onCancel={() => setModal(null)}
-            onSubmit={async (payload) => {
+            onSubmit={async (payload, imageOps) => {
               setBusy(true)
               try {
-                await saveAnimal(payload)
+                await saveAnimal(payload, imageOps)
               } finally {
                 setBusy(false)
               }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
+import * as authApi from '../../api/authApi.js'
 import FormField from '../../components/forms/FormField.jsx'
 import FormError from '../../components/forms/FormError.jsx'
 import {
@@ -21,11 +22,12 @@ import {
  *
  * Server responses (400 field errors, 409 email already registered) are
  * shown via the normalized error envelope + per-field messages. On success
- * AuthContext stores the JWT (the user is logged in immediately) and the
- * browser lands on the home page.
+ * the account exists but is NOT logged in - the JWT returned by the API is
+ * deliberately discarded, and the browser lands on the login page with a
+ * "sign in to continue" notice (registered email passed via router state).
  */
 export default function Register() {
-  const { register, isLoggedIn } = useAuth()
+  const { isLoggedIn } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname
@@ -88,8 +90,12 @@ export default function Register() {
 
     setSubmitting(true)
     try {
-      await register(payload)
-      navigate('/', { replace: true })
+      await authApi.register(payload)
+      // New account -> straight to the login page (no auto-login).
+      navigate('/login', {
+        replace: true,
+        state: { registered: form.email.trim() },
+      })
     } catch (error) {
       setApiError(error)
       setErrors(fieldErrorsToObject(error))

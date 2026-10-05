@@ -5,10 +5,13 @@ import * as authApi from '../api/authApi.js'
  * Authentication state (Session 14).
  *
  * Holds the current `user` (UserDto { id, fullName, email, phone, role }) and
- * exposes login / register / logout helpers that persist the session:
+ * exposes login / logout helpers that persist the session:
  *
  *   localStorage 'token' -> JWT accessToken (read + sent by axiosClient)
  *   localStorage 'user'  -> cached user JSON (instant state after reload)
+ *
+ * Registration deliberately does NOT start a session: the register page
+ * calls authApi.register directly and sends the new user to the login page.
  *
  * Storage trade-off (documented in PROJECT_CONTEXT section 15): localStorage
  * is XSS-readable; accepted for MVP simplicity vs. refresh-token cookies.
@@ -16,8 +19,8 @@ import * as authApi from '../api/authApi.js'
  * authentication and authorization on every request.
  *
  * The backend contract is never faked: helpers call the real
- * POST /api/auth/register and /api/auth/login and return the raw
- * AuthResponse; errors are rejected as { status, message, fieldErrors }.
+ * POST /api/auth/login and return the raw AuthResponse; errors are
+ * rejected as { status, message, fieldErrors }.
  */
 const AuthContext = createContext(null)
 
@@ -47,11 +50,6 @@ export function AuthProvider({ children }) {
     [persist],
   )
 
-  const register = useCallback(
-    async (payload) => persist(await authApi.register(payload)),
-    [persist],
-  )
-
   const logout = useCallback(() => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
@@ -65,10 +63,9 @@ export function AuthProvider({ children }) {
       isNgo: user?.role === 'NGO',
       role: user?.role ?? null,
       login,
-      register,
       logout,
     }),
-    [user, login, register, logout],
+    [user, login, logout],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

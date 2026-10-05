@@ -24,6 +24,8 @@ export default function Login() {
   const location = useLocation()
 
   const from = location.state?.from?.pathname
+  // Passed by the register page on success ("account created - sign in").
+  const registeredEmail = location.state?.registered
 
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
@@ -80,6 +82,14 @@ export default function Login() {
   return (
     <section className="page page-narrow">
       <h1>Login</h1>
+      {registeredEmail && (
+        <div className="notice-box" role="status">
+          <p>
+            Account created for <strong>{registeredEmail}</strong>. Sign in to
+            continue.
+          </p>
+        </div>
+      )}
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <FormError message={apiError?.message} />
 

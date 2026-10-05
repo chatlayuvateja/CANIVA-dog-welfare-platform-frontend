@@ -472,6 +472,44 @@ textarea:focus-visible {
   font-size: 0.85rem;
 }
 
+/* ---------- Animal photo upload (replaces the old URL field) ---------- */
+.form-field .file-hint {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.form-field .image-preview {
+  margin-top: 0.4rem;
+}
+
+.form-field .image-preview img {
+  display: block;
+  max-width: 220px;
+  max-height: 160px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+/* Small inline text button (Remove photo / Undo / Clear selected photo). */
+.btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  align-self: flex-start;
+  color: var(--color-primary);
+  font-size: 0.88rem;
+  font-family: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.btn-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .form-error {
   background: #fdeceb;
   border: 1px solid #f5c6c2;

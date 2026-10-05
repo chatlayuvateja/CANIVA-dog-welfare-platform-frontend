@@ -41,6 +41,15 @@ axiosClient.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
+  // Photo uploads (animal + story) send multipart/form-data, but the
+  // instance default header above is application/json. Axios would then
+  // stringify the FormData as JSON and send it with a JSON content type,
+  // so Spring rejects the mapping (consumes multipart) with 415
+  // "Request content type must be application/json". Drop the header for
+  // FormData - the browser sets multipart/form-data with the boundary.
+  if (config.data instanceof FormData) {
+    config.headers.delete('Content-Type')
+  }
   return config
 })
 

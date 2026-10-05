@@ -411,7 +411,10 @@ export default function MyStories() {
     }
   }
 
-  if (loading) {
+  // Spinner only while there is nothing to show yet. reload() after a save
+  // must NOT swap in the spinner: it would unmount the open editor modal,
+  // destroying its "photo did not go through" warning and the typed form.
+  if (loading && stories === null) {
     return (
       <section className="page">
         <Spinner label="Loading your stories…" />

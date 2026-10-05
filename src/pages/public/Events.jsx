@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { listPublishedEvents } from '../../api/eventApi.js'
 import { EVENT_TYPES } from '../../utils/constants.js'
-import Spinner from '../../components/common/Spinner.jsx'
 import ErrorMessage from '../../components/common/ErrorMessage.jsx'
 import EmptyState from '../../components/common/EmptyState.jsx'
+import { EventGridSkeleton } from '../../components/common/Skeleton.jsx'
 import FormField from '../../components/forms/FormField.jsx'
 import EventCard from './EventCard.jsx'
 
@@ -99,6 +99,7 @@ export default function Events() {
 
   return (
     <section className="page">
+      <p className="kicker">Gather</p>
       <h1>Events</h1>
       <p className="lead">Find a camp or drive near you and save your place.</p>
 
@@ -138,7 +139,7 @@ export default function Events() {
       </form>
 
       {loading ? (
-        <Spinner label="Loading events…" />
+        <EventGridSkeleton count={6} />
       ) : error ? (
         <ErrorMessage
           message={error.message}

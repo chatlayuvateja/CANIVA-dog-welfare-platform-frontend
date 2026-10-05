@@ -110,7 +110,12 @@ export default function Register() {
 
   return (
     <section className="page page-narrow">
-      <h1>Create your account</h1>
+      <p className="kicker">Account</p>
+      <h1>Join CANIVA</h1>
+      <p className="lead">
+        One account to meet the animals and attend events — or a rescue-partner
+        account to bring your rescue work to CANIVA.
+      </p>
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <FormError message={apiError?.message} />
 
@@ -178,7 +183,7 @@ export default function Register() {
               checked={form.role === 'NGO'}
               onChange={update('role')}
             />
-            <span>NGO account - organise events and manage listings</span>
+            <span>Rescue partner - bring your rescue work to CANIVA</span>
           </label>
         </div>
 
@@ -194,11 +199,11 @@ export default function Register() {
         )}
 
         <button className="btn btn-primary" type="submit" disabled={submitting}>
-          {submitting ? 'Creating account…' : 'Register'}
+          {submitting ? 'Creating account…' : 'Create account'}
         </button>
 
         <p className="form-alt">
-          Already registered? <Link to="/login">Login</Link>
+          Already with us? <Link to="/login">Sign in</Link>
         </p>
       </form>
     </section>

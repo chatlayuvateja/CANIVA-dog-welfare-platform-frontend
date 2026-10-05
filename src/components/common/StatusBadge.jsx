@@ -7,6 +7,8 @@
  *   vaccination: REGISTERED / COMPLETED / NO_SHOW
  *   animals:   AVAILABLE / HIDDEN / ADOPTED
  *   applications: PENDING / APPROVED / REJECTED
+ *   stories:   DRAFT / PUBLISHED
+ *   urgent:    ACTIVE / CLOSED
  *
  *   <StatusBadge status={event.status} />
  */
@@ -18,7 +20,7 @@ const TONES = [
   // blocked / negative -> red
   { className: 'badge-red', values: ['CANCELLED', 'REJECTED', 'NO_SHOW', 'HIDDEN'] },
   // special -> amber
-  { className: 'badge-amber', values: ['ADOPTED'] },
+  { className: 'badge-amber', values: ['ADOPTED', 'ACTIVE'] },
 ]
 
 function toneFor(status) {

@@ -9,6 +9,8 @@ import Events from '../pages/public/Events.jsx'
 import EventDetails from '../pages/public/EventDetails.jsx'
 import Adoption from '../pages/public/Adoption.jsx'
 import AnimalDetails from '../pages/public/AnimalDetails.jsx'
+import Stories from '../pages/public/Stories.jsx'
+import StoryDetails from '../pages/public/StoryDetails.jsx'
 
 // Auth
 import Login from '../pages/auth/Login.jsx'
@@ -29,15 +31,19 @@ import Registrations from '../pages/ngo/Registrations.jsx'
 import Animals from '../pages/ngo/Animals.jsx'
 import Applications from '../pages/ngo/Applications.jsx'
 import Profile from '../pages/ngo/Profile.jsx'
+import MyStories from '../pages/ngo/MyStories.jsx'
+import UrgentCases from '../pages/ngo/UrgentCases.jsx'
 
 import NotFound from '../pages/public/NotFound.jsx'
 
 /**
- * Application routes (Sessions 14 + 16).
+ * Application routes (Sessions 14 + 16, redesigned in the content wave).
  *
  * Public area: Home, Events, Event Details, Adoption, Animal Details,
- * Login, Register - open to everyone (guests get 401 from protected APIs,
- * never fake data).
+ * Stories (/stories, /stories/:id), Login, Register - open to everyone
+ * (guests get 401 from protected APIs, never fake data). Public story and
+ * urgent-case content comes from GET /api/stories and GET /api/urgent;
+ * sections the API returns empty are omitted, not faked.
  *
  * Workflow area (/events/:id/register-*, /adoption/animals/:id/apply,
  * /my-activities): ProtectedRoute only - ANY logged-in role may submit and
@@ -47,6 +53,8 @@ import NotFound from '../pages/public/NotFound.jsx'
  * NGO area: everything under /ngo/** is wrapped in
  *   ProtectedRoute (must be logged in, else -> /login)
  *   RoleRoute role="NGO" (must be NGO, else forbidden state)
+ * and carries the GoNav chip sub-nav - including the content pages
+ * /ngo/stories (rescue-story editor) and /ngo/urgent (urgent cases).
  * Guards are UX only - the backend enforces the same rules on every
  * endpoint (401 anonymous / 403 wrong role / 404 foreign resources).
  */
@@ -60,6 +68,8 @@ export default function AppRoutes() {
         <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/adoption" element={<Adoption />} />
         <Route path="/adoption/animals/:id" element={<AnimalDetails />} />
+        <Route path="/stories" element={<Stories />} />
+        <Route path="/stories/:id" element={<StoryDetails />} />
 
         {/* Auth */}
         <Route path="/login" element={<Login />} />
@@ -83,6 +93,8 @@ export default function AppRoutes() {
             <Route path="/ngo/registrations" element={<Registrations />} />
             <Route path="/ngo/animals" element={<Animals />} />
             <Route path="/ngo/applications" element={<Applications />} />
+            <Route path="/ngo/stories" element={<MyStories />} />
+            <Route path="/ngo/urgent" element={<UrgentCases />} />
             <Route path="/ngo/profile" element={<Profile />} />
           </Route>
         </Route>

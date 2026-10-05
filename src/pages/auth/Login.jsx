@@ -81,7 +81,8 @@ export default function Login() {
 
   return (
     <section className="page page-narrow">
-      <h1>Login</h1>
+      <p className="kicker">Account</p>
+      <h1>Welcome back</h1>
       {registeredEmail && (
         <div className="notice-box" role="status">
           <p>
@@ -119,7 +120,7 @@ export default function Login() {
         </button>
 
         <p className="form-alt">
-          New here? <Link to="/register">Create an account</Link>
+          New here? <Link to="/register">Join CANIVA</Link>
         </p>
       </form>
     </section>

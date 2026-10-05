@@ -23,8 +23,10 @@ export default function RoleRoute({ role = 'NGO' }) {
   if (userRole !== role) {
     return (
       <ErrorMessage
-        title="Access denied"
-        message={`This area is restricted to ${role} accounts. Your account role is ${userRole ?? 'unknown'}.`}
+        title="This part is for rescue partners"
+        message={`Only ${role} accounts can work here — yours is ${
+          userRole ?? 'unknown'
+        }. The animals, stories and events are all open to you.`}
       />
     )
   }

@@ -1,0 +1,8 @@
+# Docker build context - keep the image small and reproducible.
+# The build installs its own node_modules (npm ci) and compiles
+# the bundle itself; local artifacts must not leak into the image.
+node_modules
+dist
+.env
+.env.*
+.dockerignore

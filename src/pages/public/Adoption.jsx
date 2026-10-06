@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { animalImageUrl, listAvailableAnimals } from '../../api/animalApi.js'
+import { useAuth } from '../../context/AuthContext.jsx'
 import AnimalPortrait from '../../components/common/AnimalPortrait.jsx'
 import StatusBadge from '../../components/common/StatusBadge.jsx'
 import ErrorMessage from '../../components/common/ErrorMessage.jsx'
@@ -16,6 +17,10 @@ import { AnimalGridSkeleton } from '../../components/common/Skeleton.jsx'
  * the remaining answers shape the summary copy only - we never pretend
  * to know more about an animal than its profile says. Everything below
  * is GET /api/animals (AVAILABLE only), zero mock data.
+ *
+ * Role note (owner request): the four-question survey is adopter-facing.
+ * In an NGO session it never renders - partners land on a plain catalogue
+ * view of the same listings instead.
  */
 
 const QUESTIONS = [
@@ -207,6 +212,7 @@ function CompanionWizard({ onDone, onSkip }) {
  * Adoption listing page.
  */
 export default function Adoption() {
+  const { isNgo } = useAuth()
   const [animals, setAnimals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -242,18 +248,32 @@ export default function Adoption() {
 
   return (
     <section className="page">
-      <p className="kicker">Adoption</p>
-      <h1>Find your companion.</h1>
-      <p className="lead">
-        Not a search form. Four gentle questions, then the animals whose
-        profiles fit what you told us - and everyone else who is still waiting.
-      </p>
+      {isNgo ? (
+        <>
+          <p className="kicker">Adoption catalogue</p>
+          <h1>The adoption catalogue.</h1>
+          <p className="lead">
+            Every animal rescue partners have published - the same
+            catalogue adopters browse.
+          </p>
+        </>
+      ) : (
+        <>
+          <p className="kicker">Adoption</p>
+          <h1>Find your companion.</h1>
+          <p className="lead">
+            Not a search form. Four gentle questions, then the animals whose
+            profiles fit what you told us - and everyone else who is still waiting.
+          </p>
+        </>
+      )}
 
-      {prefs === null && (
+      {/* The companion survey is for adopters - never shown in an NGO session. */}
+      {!isNgo && prefs === null && (
         <CompanionWizard onDone={setPrefs} onSkip={() => setPrefs({})} />
       )}
 
-      {prefs !== null && (
+      {!isNgo && prefs !== null && (
         <div className="wizard-summary">
           {showAll ? (
             <>Showing every animal waiting for a home.</>

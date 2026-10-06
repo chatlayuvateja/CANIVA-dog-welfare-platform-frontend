@@ -52,7 +52,8 @@ import NotFound from '../pages/public/NotFound.jsx'
  *
  * NGO area: everything under /ngo/** is wrapped in
  *   ProtectedRoute (must be logged in, else -> /login)
- *   RoleRoute role="NGO" (must be NGO, else forbidden state)
+ *   RoleRoute role="NGO" (must be NGO, else -> redirect home, replace -
+ *   keeps the browser Back button off other roles' URLs)
  * and carries the GoNav chip sub-nav - including the content pages
  * /ngo/stories (rescue-story editor) and /ngo/urgent (urgent cases).
  * Guards are UX only - the backend enforces the same rules on every
